@@ -5,10 +5,10 @@ Script Name: OS Information
 =========================================================================== 
 #>
 
-# Clear screen
+# Clear screen before start
 Clear-Host
 
-# Display the menu and set text colour to cyan
+# Display the menu and set title text colour to cyan 
 Write-Host "===========================================" -ForegroundColor Cyan
 Write-Host "          System Information Menu          " -ForegroundColor Cyan
 Write-Host "===========================================" -ForegroundColor Cyan
@@ -31,7 +31,6 @@ Write-Host ""
 # This variable will store the user's menu selection.
 $Choice = 0
 
-
 # Start a do loop.
 # A do loop executes the code inside the braces at least once before
 # checking the condition at the bottom of the loop.
@@ -43,8 +42,8 @@ do {
     try
     {
 
-        # Get the user to input a number from the menu option and store in the variable "$choice"
-        $Choice = Read-Host "Please select an option from the menu (1 - 9)"
+        # Get the user to input a number from the menu option and store in the variable "$Choice"
+        $Choice = Read-Host "Please enter choice"
 
         # Convert the user's input from a string to an integer.
         $Choice = [int]$Choice
@@ -53,8 +52,6 @@ do {
         # -lt means "less than"
         # -or means "either condition can be true"
         # -gt means "greater than"
-        #
-        # Therefore:
         # If the number is less than 1 OR greater than 9,
         # it is an invalid menu selection.
         if ($Choice -lt 1 -or $Choice -gt 9)
@@ -68,66 +65,66 @@ do {
         # the user selected.
         switch ($Choice) {
 
-                # Option 1 - Display "Operating system currently being used"
+                # Choice 1 - Display "Operating system currently being used"
                 1 {
                     # Display info
-                    Write-Host "option 1"
+                    Write-Host "1 - Operating system currently being used" -ForegroundColor Green
                     Write-Host ""
                 }
 
-                # Option 2 - Display "Windows remote service status"
+                # Choice 2 - Display "Windows remote service status"
                 2 {
                     # Display info
-                    Write-Host "option 2 - Windows remote service status"
+                    Write-Host "2 - Windows remote service status" -ForegroundColor Green
                     Write-Host ""
                 }
 
-                # Option 3 - Display "Computer manufacturer and model"
+                # Choice 3 - Display "Computer manufacturer and model"
                 3 {
                     # Display info
-                    Write-Host "option 3 - Computer manufacturer and model"
+                    Write-Host "3 - Computer manufacturer and model" -ForegroundColor Green
                     Write-Host ""
                 }
 
-                # Option 4 - Display "Computer name"
+                # Choice 4 - Display "Computer name"
                 4 {
                     # Display info
-                    Write-Host "option 4 - Computer name"
+                    Write-Host "4 - Computer name" -ForegroundColor Green
                     Write-Host ""
                 }
 
-                # Option 5 - Display "Computer domain name"
+                # Choice 5 - Display "Computer domain name"
                 5 {
                     # Display info
-                    Write-Host "option 5 - Computer domain name"
+                    Write-Host "5 - Computer domain name" -ForegroundColor Green
                     Write-Host ""
                 }
 
-                # Option 6 - Display "Computer trusted hosts"
+                # Choice 6 - Display "Computer trusted hosts"
                 6 {
                     # Display info
-                    Write-Host "option 6 - Computer trusted hosts"
+                    Write-Host "6 - Computer trusted hosts" -ForegroundColor Green
                     Write-Host ""
                 }
 
-                # Option 7 - Display "Operating system architectures"
+                # Choice 7 - Display "Operating system architectures"
                 7 {
                     # Display info
-                    Write-Host "option 7 - Operating system architecture"
+                    Write-Host "7 - Operating system architecture" -ForegroundColor Green
                     Write-Host ""
                 }
 
-                # Option 8 - Display "Computer trusted hosts"
+                # Choice 8 - Display "Computer trusted hosts"
                 8 {
                     # Display info
-                    Write-Host "option 8 - Computer trusted hosts"
+                    Write-Host "8 - Computer trusted hosts" -ForegroundColor Green
                     Write-Host ""
                 }
 
-                # Option 9 - Quit
+                # Choice 9 - Quit
                 9 {
                     # Display info
-                    Write-Host "option 9 - Exiting menu"
+                    Write-Host "9 - Exiting the menu..." -ForegroundColor Green
                 
                 }
             }
@@ -141,8 +138,8 @@ do {
         # Display an error message in red text.
         # This will occur if:
         # - The user enters text such as "abc"
-        # - The user enters a number outside the range 1 to 3
-        Write-Host "Error invalid input: Please try again." -ForegroundColor Red
+        # - The user enters a number outside the range 1 to 9
+        Write-Host "Error: invalid input - Please try again." -ForegroundColor Red
         Write-Host ""
     }
 
