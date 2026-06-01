@@ -41,28 +41,85 @@ $OSName = Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object -Expa
 $OSVersion = Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object -ExpandProperty Version
 
 # 2. Windows remote service status
-# 
+# Use same method like in no. 1 (above) to retrieve data required
+# But instead of Get-CimInstance, use Get-Service cmdlet
+# Then store in a variable called $RemoteServiceName and $RemoteServiceStatus
 $RemoteServiceName = Get-Service -Name WinRM | Select-Object -ExpandProperty DisplayName
 $RemoteServiceStatus = Get-Service -Name WinRM | Select-Object -ExpandProperty Status
 
 # 3. Computer manufacturer and model
+# Use same method like in no. 1 (above) to retrieve data required,
+# Then store data in variable called $ComputerManufacturer and $ComputerModel
 $ComputerManufacturer = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -ExpandProperty Manufacturer
 $ComputerModel = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -ExpandProperty Model
 
 # 4. Computer name
+# Use same method like in no. 1 (above) to retrieve data required, then store data in variable called $ComputerName
 $ComputerName = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -ExpandProperty Name
 
 # 5. Computer domain name
+# Use same method like in no. 1 (above) to retrieve data required, then store data in variable called $DomainName
 $DomainName = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -ExpandProperty Domain
 
 # 6. Computer trusted hosts
+# Use Get-Item cmdlet to retrieve the TrustedHosts configuration object from the WSMan (Windows Remote Management)
+# WSMan:\localhost\Client\TrustedHosts is the location Where trusted hosts data is stored
+# Then pass the return info via pipe to command Select-Object cmdlet (select specific properties from an object)
+# Then add -ExpandProperty (only the value is displayed), then Value (TrustedHost Name)
+# Create a varible called $TrustedHosts and store
 $TrustedHosts = Get-Item WSMan:\localhost\Client\TrustedHosts | Select-Object -ExpandProperty Value
 
+# 6. If TrustedHost is not configured/found
+# Create a function called CheckTurstedHostStatus to contain the checking (if/else statements)
+function CheckTurstedHostStatus {
+    # Check whether the $TrustedHosts variable contains any data
+    # IsNullOrWhiteSpace() returns True if:
+    # - The variable is null or The variable is empty ("") or The variable contains only spaces
+    # This allows us to determine whether any TrustedHosts have been configured.
+    if ([string]::IsNullOrWhiteSpace($TrustedHosts))
+    {
+        # If no TrustedHosts are configured, display a message to the user.
+        Write-Host "- No TrustedHost configured/found" -ForegroundColor Green
+    }
+    else
+    {
+        # If any TrustedHosts exist, display the value stored in the variable.
+        Write-Host "- $TrustedHosts" -ForegroundColor Green
+    }
+}
+
 # 7. Operating system architecture
+# Use same method like in no. 1 (above) to retrieve data required, then store data in variable called $OSArchitecture
 $OSArchitecture = Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object -ExpandProperty OSArchitecture
 
 # 8. Get all information
+function GetAllInfo {
 
+    Write-Host "Operating system currently being used:" -ForegroundColor Green
+    Write-Host "- $OSName" -ForegroundColor Green
+    Write-Host "- $OSVersion" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Windows remote service status:" -ForegroundColor Green
+    Write-Host "- $RemoteServiceName" -ForegroundColor Green
+    Write-Host "- Status: $RemoteServiceStatus" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Computer manufacturer and model:" -ForegroundColor Green
+    Write-Host "- $ComputerManufacturer" -ForegroundColor Green
+    Write-Host "- $ComputerModel" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Computer name:" -ForegroundColor Green
+    Write-Host "- $ComputerName" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Computer domain name:" -ForegroundColor Green
+    Write-Host "- $DomainName" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Computer trusted hosts:" -ForegroundColor Green
+    CheckTurstedHostStatus
+    Write-Host ""
+    Write-Host "Operating system architecture:" -ForegroundColor Green
+    Write-Host "- $OSArchitecture" -ForegroundColor Green
+    Write-Host ""
+}
 
 # Start a do loop.
 # A do loop executes the code inside the braces at least once before
@@ -147,10 +204,10 @@ do {
 
                 # Choice 6 - Display "Computer trusted hosts"
                 6 {
-                    # Display retrieved data from variable: $TrustedHosts
+                    # Display retrieved data from function: CheckTurstedHostStatus
                     # set text to green
                     Write-Host "Computer trusted hosts:" -ForegroundColor Green
-                    Write-Host "- $TrustedHosts" -ForegroundColor Green
+                    CheckTurstedHostStatus
                     Write-Host ""
                 }
 
@@ -165,14 +222,16 @@ do {
 
                 # Choice 8 - Display "Computer trusted hosts"
                 8 {
-                    # Display info
-                    Write-Host "8 - Get all information" -ForegroundColor Green
+                    # Display retrieved data from function: 
+                    # set text to green
+                    Write-Host "Get all information" -ForegroundColor Green
+                    GetAllInfo
                     Write-Host ""
                 }
 
                 # Choice 9 - Quit
                 9 {
-                    # Display info
+                    # Display exiting statement
                     Write-Host "Exiting the menu..." -ForegroundColor Green
                 
                 }
