@@ -8,11 +8,10 @@ Script Name: OS Information
 # Clear screen before start
 Clear-Host
 
-# Display the menu and set title text colour to cyan 
+# Display the menu and set text colours
 Write-Host "===========================================" -ForegroundColor Cyan
 Write-Host "          System Information Menu          " -ForegroundColor Cyan
 Write-Host "===========================================" -ForegroundColor Cyan
-Write-Host ""
 Write-Host "1. Operating system currently being used"
 Write-Host "2. Windows remote service status"
 Write-Host "3. Computer manufacturer and model"
@@ -22,7 +21,9 @@ Write-Host "6. Computer trusted hosts"
 Write-Host "7. Operating system architecture"
 Write-Host "8. Get all information"
 Write-Host "9. Quit"
-Write-Host ""
+Write-Host "===========================================" -ForegroundColor Cyan
+Write-Host "    Please enter a number from 1 to 9      "
+Write-Host "        To view the information            "
 Write-Host "===========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -30,6 +31,38 @@ Write-Host ""
 # Create a variable called $Choice and give it an initial value of 0.
 # This variable will store the user's menu selection.
 $Choice = 0
+
+# 1. Operating system currently being used (OS name and version)
+# Use Get-CimInstance cmdlet to retrieve info from Win32_OperatingSystem class (contains information about the OS)
+# Then use pipe to pass the return info on to next command Select-Object cmdlet (select specific properties from an object)
+# Then add -ExpandProperty (only the value is displayed), then Caption (OS Name) or Version (OS Version)
+# Store in a created varible called, $OSName and $OSVersion
+$OSName = Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object -ExpandProperty Caption
+$OSVersion = Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object -ExpandProperty Version
+
+# 2. Windows remote service status
+# 
+$RemoteServiceName = Get-Service -Name WinRM | Select-Object -ExpandProperty DisplayName
+$RemoteServiceStatus = Get-Service -Name WinRM | Select-Object -ExpandProperty Status
+
+# 3. Computer manufacturer and model
+$ComputerManufacturer = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -ExpandProperty Manufacturer
+$ComputerModel = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -ExpandProperty Model
+
+# 4. Computer name
+$ComputerName = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -ExpandProperty Name
+
+# 5. Computer domain name
+$DomainName = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -ExpandProperty Domain
+
+# 6. Computer trusted hosts
+$TrustedHosts = Get-Item WSMan:\localhost\Client\TrustedHosts | Select-Object -ExpandProperty Value
+
+# 7. Operating system architecture
+$OSArchitecture = Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object -ExpandProperty OSArchitecture
+
+# 8. Get all information
+
 
 # Start a do loop.
 # A do loop executes the code inside the braces at least once before
@@ -43,7 +76,7 @@ do {
     {
 
         # Get the user to input a number from the menu option and store in the variable "$Choice"
-        $Choice = Read-Host "Please enter choice"
+        $Choice = Read-Host "Please enter a menu number"
 
         # Convert the user's input from a string to an integer.
         $Choice = [int]$Choice
@@ -61,70 +94,86 @@ do {
             throw "Invalid selection."
         }
 
-        # Use a switch statement to determine which menu option
-        # the user selected.
+        # Use a switch statement to determine which menu option the user selected.
         switch ($Choice) {
 
                 # Choice 1 - Display "Operating system currently being used"
                 1 {
-                    # Display info
-                    Write-Host "1 - Operating system currently being used" -ForegroundColor Green
+                    # Display retrieved data from variables: $OSName and $OSVersion
+                    # set text to green
+                    Write-Host "Operating system currently being used:" -ForegroundColor Green
+                    Write-Host "- $OSName" -ForegroundColor Green
+                    Write-Host "- $OSVersion" -ForegroundColor Green
                     Write-Host ""
                 }
 
                 # Choice 2 - Display "Windows remote service status"
                 2 {
-                    # Display info
-                    Write-Host "2 - Windows remote service status" -ForegroundColor Green
+                    # Display retrieved data from variables: $RemoteServiceName and $RemoteServiceStatus
+                    # set text to green
+                    Write-Host "Windows remote service status:" -ForegroundColor Green
+                    Write-Host "- $RemoteServiceName" -ForegroundColor Green
+                    Write-Host "- Status: $RemoteServiceStatus" -ForegroundColor Green
                     Write-Host ""
                 }
 
                 # Choice 3 - Display "Computer manufacturer and model"
                 3 {
-                    # Display info
-                    Write-Host "3 - Computer manufacturer and model" -ForegroundColor Green
+                    # Display retrieved data from variables: $ComputerManufacturer and $ComputerModel
+                    # set text to green
+                    Write-Host "Computer manufacturer and model:" -ForegroundColor Green
+                    Write-Host "- $ComputerManufacturer" -ForegroundColor Green
+                    Write-Host "- $ComputerModel" -ForegroundColor Green
                     Write-Host ""
                 }
 
                 # Choice 4 - Display "Computer name"
                 4 {
-                    # Display info
-                    Write-Host "4 - Computer name" -ForegroundColor Green
+                    # Display retrieved data from variable: $ComputerName
+                    # set text to green
+                    Write-Host "Computer name:" -ForegroundColor Green
+                    Write-Host "- $ComputerName" -ForegroundColor Green
                     Write-Host ""
                 }
 
                 # Choice 5 - Display "Computer domain name"
                 5 {
-                    # Display info
-                    Write-Host "5 - Computer domain name" -ForegroundColor Green
+                    # Display retrieved data from variable: $DomainName
+                    # set text to green
+                    Write-Host "Computer domain name:" -ForegroundColor Green
+                    Write-Host "- $DomainName" -ForegroundColor Green
                     Write-Host ""
                 }
 
                 # Choice 6 - Display "Computer trusted hosts"
                 6 {
-                    # Display info
-                    Write-Host "6 - Computer trusted hosts" -ForegroundColor Green
+                    # Display retrieved data from variable: $TrustedHosts
+                    # set text to green
+                    Write-Host "Computer trusted hosts:" -ForegroundColor Green
+                    Write-Host "- $TrustedHosts" -ForegroundColor Green
                     Write-Host ""
                 }
 
                 # Choice 7 - Display "Operating system architectures"
                 7 {
-                    # Display info
-                    Write-Host "7 - Operating system architecture" -ForegroundColor Green
+                    # Display retrieved data from variable: $OSArchitecture
+                    # set text to green
+                    Write-Host "Operating system architecture:" -ForegroundColor Green
+                    Write-Host "- $OSArchitecture" -ForegroundColor Green
                     Write-Host ""
                 }
 
                 # Choice 8 - Display "Computer trusted hosts"
                 8 {
                     # Display info
-                    Write-Host "8 - Computer trusted hosts" -ForegroundColor Green
+                    Write-Host "8 - Get all information" -ForegroundColor Green
                     Write-Host ""
                 }
 
                 # Choice 9 - Quit
                 9 {
                     # Display info
-                    Write-Host "9 - Exiting the menu..." -ForegroundColor Green
+                    Write-Host "Exiting the menu..." -ForegroundColor Green
                 
                 }
             }
