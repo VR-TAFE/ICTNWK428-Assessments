@@ -8,7 +8,7 @@ Script Name: OS Information
 # Clear screen before starting
 Clear-Host
 
-# Display the menu and set text colours
+# Display the menu and set text colours titles to Cyan
 Write-Host "===========================================" -ForegroundColor Cyan
 Write-Host "          System Information Menu          " -ForegroundColor Cyan
 Write-Host "===========================================" -ForegroundColor Cyan
