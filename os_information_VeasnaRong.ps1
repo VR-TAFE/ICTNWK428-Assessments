@@ -8,6 +8,8 @@ Script Name: OS Information
 # Clear screen before starting
 Clear-Host
 
+#========================================= MENU =========================================#
+
 # Display the menu and set text colours titles to Cyan
 Write-Host "===========================================" -ForegroundColor Cyan
 Write-Host "          System Information Menu          " -ForegroundColor Cyan
@@ -27,6 +29,7 @@ Write-Host "        To view the information            "
 Write-Host "===========================================" -ForegroundColor Cyan
 Write-Host ""
 
+#========================================= VARIABLES =========================================#
 
 # Create a variable called $Choice and give it an initial value of 0.
 # This variable will store the user's menu selection.
@@ -69,52 +72,122 @@ $DomainName = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -E
 # Create a varible called $TrustedHosts and store
 $TrustedHosts = Get-Item WSMan:\localhost\Client\TrustedHosts | Select-Object -ExpandProperty Value
 
-# 6. If TrustedHost is not configured/found
+# 7. Operating system architecture
+# Use same method like in no. 1 (above) to retrieve data required, then store data in variable called $OSArchitecture
+$OSArchitecture = Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object -ExpandProperty OSArchitecture
+
+#========================================= FUNCTIONS =========================================#
+
+# 1. Operating system currently being used (OS name and version)
+# Create a function called GetOSNameVersion to contain data from varibles: $OSName and $OSVersion
+function GetOSNameVersion {
+    # Display retrieved data from variables: $OSName and $OSVersion
+    # set text to green
+    Write-Host "Operating system currently being used:" -ForegroundColor Green
+    Write-Host "- $OSName" -ForegroundColor Green
+    Write-Host "- $OSVersion" -ForegroundColor Green
+    Write-Host ""
+}
+
+# 2. Windows remote service status
+# Create a function called GetRemoteServiceStatus to contain data from varibles: $RemoteServiceName and $RemoteServiceStatus
+function GetRemoteServiceStatus {
+    # Display retrieved data from variables: $RemoteServiceName and $RemoteServiceStatus
+    # set text to green
+    Write-Host "Windows remote service status:" -ForegroundColor Green
+    Write-Host "- $RemoteServiceName" -ForegroundColor Green
+    Write-Host "- Status: $RemoteServiceStatus" -ForegroundColor Green
+    Write-Host ""
+}
+
+# 3. Computer manufacturer and model
+# Create a function called GetComputerManuMode to contain data from varibles: $ComputerManufacturer and $ComputerModel
+function GetComputerManuMode {
+    # Display retrieved data from variables: $ComputerManufacturer and $ComputerModel
+    # set text to green
+    Write-Host "Computer manufacturer and model:" -ForegroundColor Green
+    Write-Host "- $ComputerManufacturer" -ForegroundColor Green
+    Write-Host "- $ComputerModel" -ForegroundColor Green
+    Write-Host ""
+}
+
+# 4. Computer name
+# Create a function called GetComputerName to contain data from varible: $ComputerName
+function GetComputerName {
+    # Display retrieved data from variable: $ComputerName
+    # set text to green
+    Write-Host "Computer name:" -ForegroundColor Green
+    Write-Host "- $ComputerName" -ForegroundColor Green
+    Write-Host ""
+}
+
+# 5. Computer domain name
+# Create a function called GetComputerDomainName to contain data from varible: $ComputerName
+function GetComputerDomainName {
+    # Display retrieved data from variable: $DomainName
+    # set text to green
+    Write-Host "Computer domain name:" -ForegroundColor Green
+    Write-Host "- $DomainName" -ForegroundColor Green
+    Write-Host ""
+}
+
+# 6. Computer trusted hosts 
 # Create a function called CheckTurstedHostStatus to contain the checking (if/else statements)
-function CheckTurstedHostStatus {
+function GetTurstedHostStatus {
     # Check whether the $TrustedHosts variable contains any data
     # IsNullOrWhiteSpace() returns True if:
     # The variable is null or The variable is empty ("") or The variable contains only spaces
     # This allows us to determine whether any TrustedHosts have been configured.
     if ([string]::IsNullOrWhiteSpace($TrustedHosts))
     {
+        # set text to green and display "Computer trusted hosts:"
+        Write-Host "Computer trusted hosts:" -ForegroundColor Green
         # If no TrustedHosts are configured, display a message to the user.
         Write-Host "- No TrustedHost configured/found" -ForegroundColor Green
+        Write-Host ""
     }
     else
     {
+        # set text to green and display "Computer trusted hosts:"
+        Write-Host "Computer trusted hosts:" -ForegroundColor Green
         # If any TrustedHosts exist, display the value stored in the variable.
         Write-Host "- $TrustedHosts" -ForegroundColor Green
+        Write-Host ""
     }
 }
 
 # 7. Operating system architecture
-# Use same method like in no. 1 (above) to retrieve data required, then store data in variable called $OSArchitecture
-$OSArchitecture = Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object -ExpandProperty OSArchitecture
+# Create a function called GetOSArchitectureto contain data from varible: $OSArchitecture
+function GetOSArchitecture {
+        # Display retrieved data from variable: $OSArchitecture
+        # set text to green
+        Write-Host "Operating system architecture:" -ForegroundColor Green
+        Write-Host "- $OSArchitecture" -ForegroundColor Green
+        Write-Host ""
+}
 
 # 8. Get all information
-# Create a function called GetAllInfo and contain all menu data above  
+# Create a function called GetAllInfo and contain all previous functions (1-7) above  
 function GetAllInfo {
-
-    Write-Host "Operating system currently being used:" -ForegroundColor Green
-    Write-Host "- $OSName" -ForegroundColor Green
-    Write-Host "- $OSVersion" -ForegroundColor Green
-    Write-Host "Windows remote service status:" -ForegroundColor Green
-    Write-Host "- $RemoteServiceName" -ForegroundColor Green
-    Write-Host "- Status: $RemoteServiceStatus" -ForegroundColor Green
-    Write-Host "Computer manufacturer and model:" -ForegroundColor Green
-    Write-Host "- $ComputerManufacturer" -ForegroundColor Green
-    Write-Host "- $ComputerModel" -ForegroundColor Green
-    Write-Host "Computer name:" -ForegroundColor Green
-    Write-Host "- $ComputerName" -ForegroundColor Green
-    Write-Host "Computer domain name:" -ForegroundColor Green
-    Write-Host "- $DomainName" -ForegroundColor Green
-    Write-Host "Computer trusted hosts:" -ForegroundColor Green
-    CheckTurstedHostStatus
-    Write-Host "Operating system architecture:" -ForegroundColor Green
-    Write-Host "- $OSArchitecture" -ForegroundColor Green
-    Write-Host ""
+    # set text to green and display "All System Information:" 
+    Write-Host "All System Information:" -ForegroundColor Green
+    # Funtion: 1. Operating system currently being used
+    GetOSNameVersion
+    # Funtion: 2. Windows remote service status
+    GetComputerManuMode
+    # Funtion: 3. Computer manufacturer and model
+    GetComputerManuMode
+    # Funtion: # 4. Computer name
+    GetComputerName
+    # Funtion: 5. Computer domain name
+    GetComputerDomainName
+    # Funtion: 6. Computer trusted hosts
+    GetTurstedHostStatus
+    # Funtion: 7. Operating system architecture
+    GetOSArchitecture
 }
+
+#========================================= SCRIPTS =========================================#
 
 # Start a do loop.
 # A do loop executes the code inside the braces at least once before
@@ -151,77 +224,50 @@ do {
 
                 # Choice 1 - Display "Operating system currently being used"
                 1 {
-                    # Display retrieved data from variables: $OSName and $OSVersion
-                    # set text to green
-                    Write-Host "Operating system currently being used:" -ForegroundColor Green
-                    Write-Host "- $OSName" -ForegroundColor Green
-                    Write-Host "- $OSVersion" -ForegroundColor Green
-                    Write-Host ""
+                    # Display retrieved data from function: GetOSNameVersion
+                    GetOSNameVersion
                 }
 
                 # Choice 2 - Display "Windows remote service status"
                 2 {
-                    # Display retrieved data from variables: $RemoteServiceName and $RemoteServiceStatus
-                    # set text to green
-                    Write-Host "Windows remote service status:" -ForegroundColor Green
-                    Write-Host "- $RemoteServiceName" -ForegroundColor Green
-                    Write-Host "- Status: $RemoteServiceStatus" -ForegroundColor Green
-                    Write-Host ""
+                    # Display retrieved data from function: GetRemoteServiceStatus
+                    GetRemoteServiceStatus
                 }
 
                 # Choice 3 - Display "Computer manufacturer and model"
                 3 {
-                    # Display retrieved data from variables: $ComputerManufacturer and $ComputerModel
-                    # set text to green
-                    Write-Host "Computer manufacturer and model:" -ForegroundColor Green
-                    Write-Host "- $ComputerManufacturer" -ForegroundColor Green
-                    Write-Host "- $ComputerModel" -ForegroundColor Green
-                    Write-Host ""
+                    # Display retrieved data from function: GetComputerManuMode
+                    GetComputerManuMode
                 }
 
                 # Choice 4 - Display "Computer name"
                 4 {
-                    # Display retrieved data from variable: $ComputerName
-                    # set text to green
-                    Write-Host "Computer name:" -ForegroundColor Green
-                    Write-Host "- $ComputerName" -ForegroundColor Green
-                    Write-Host ""
+                    # Display retrieved data from function: GetComputerName
+                    GetComputerName
                 }
 
                 # Choice 5 - Display "Computer domain name"
                 5 {
-                    # Display retrieved data from variable: $DomainName
-                    # set text to green
-                    Write-Host "Computer domain name:" -ForegroundColor Green
-                    Write-Host "- $DomainName" -ForegroundColor Green
-                    Write-Host ""
+                    # Display retrieved data from function: GetComputerDomainName
+                    GetComputerDomainName
                 }
 
                 # Choice 6 - Display "Computer trusted hosts"
                 6 {
-                    # Display retrieved data from function: CheckTurstedHostStatus
-                    # set text to green
-                    Write-Host "Computer trusted hosts:" -ForegroundColor Green
-                    CheckTurstedHostStatus
-                    Write-Host ""
+                    # Display retrieved data from function: GetTurstedHostStatus
+                    GetTurstedHostStatus
                 }
 
                 # Choice 7 - Display "Operating system architectures"
                 7 {
-                    # Display retrieved data from variable: $OSArchitecture
-                    # set text to green
-                    Write-Host "Operating system architecture:" -ForegroundColor Green
-                    Write-Host "- $OSArchitecture" -ForegroundColor Green
-                    Write-Host ""
+                    # Display retrieved data from function: GetOSArchitecture
+                    GetOSArchitecture
                 }
 
                 # Choice 8 - Display "Computer trusted hosts"
                 8 {
                     # Display retrieved data from function: GetAllInfo
-                    # set text to green
-                    Write-Host "All System Information:" -ForegroundColor Green
                     GetAllInfo
-                    Write-Host ""
                 }
 
                 # Choice 9 - Quit
@@ -234,8 +280,7 @@ do {
         }
 
     # Start the catch block.
-    # If an error occurs in the try block, PowerShell immediately
-    # jumps to this section.
+    # If an error occurs in the try block, immediately jumps to this section.
     catch
     {
         # Display an error message in red text.
