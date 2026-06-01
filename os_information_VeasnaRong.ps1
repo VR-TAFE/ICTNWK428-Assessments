@@ -5,7 +5,7 @@ Script Name: OS Information
 =========================================================================== 
 #>
 
-# Clear screen before start
+# Clear screen before starting
 Clear-Host
 
 # Display the menu and set text colours
@@ -74,7 +74,7 @@ $TrustedHosts = Get-Item WSMan:\localhost\Client\TrustedHosts | Select-Object -E
 function CheckTurstedHostStatus {
     # Check whether the $TrustedHosts variable contains any data
     # IsNullOrWhiteSpace() returns True if:
-    # - The variable is null or The variable is empty ("") or The variable contains only spaces
+    # The variable is null or The variable is empty ("") or The variable contains only spaces
     # This allows us to determine whether any TrustedHosts have been configured.
     if ([string]::IsNullOrWhiteSpace($TrustedHosts))
     {
@@ -93,29 +93,24 @@ function CheckTurstedHostStatus {
 $OSArchitecture = Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object -ExpandProperty OSArchitecture
 
 # 8. Get all information
+# Create a function called GetAllInfo and contain all menu data above  
 function GetAllInfo {
 
     Write-Host "Operating system currently being used:" -ForegroundColor Green
     Write-Host "- $OSName" -ForegroundColor Green
     Write-Host "- $OSVersion" -ForegroundColor Green
-    Write-Host ""
     Write-Host "Windows remote service status:" -ForegroundColor Green
     Write-Host "- $RemoteServiceName" -ForegroundColor Green
     Write-Host "- Status: $RemoteServiceStatus" -ForegroundColor Green
-    Write-Host ""
     Write-Host "Computer manufacturer and model:" -ForegroundColor Green
     Write-Host "- $ComputerManufacturer" -ForegroundColor Green
     Write-Host "- $ComputerModel" -ForegroundColor Green
-    Write-Host ""
     Write-Host "Computer name:" -ForegroundColor Green
     Write-Host "- $ComputerName" -ForegroundColor Green
-    Write-Host ""
     Write-Host "Computer domain name:" -ForegroundColor Green
     Write-Host "- $DomainName" -ForegroundColor Green
-    Write-Host ""
     Write-Host "Computer trusted hosts:" -ForegroundColor Green
     CheckTurstedHostStatus
-    Write-Host ""
     Write-Host "Operating system architecture:" -ForegroundColor Green
     Write-Host "- $OSArchitecture" -ForegroundColor Green
     Write-Host ""
@@ -222,9 +217,9 @@ do {
 
                 # Choice 8 - Display "Computer trusted hosts"
                 8 {
-                    # Display retrieved data from function: 
+                    # Display retrieved data from function: GetAllInfo
                     # set text to green
-                    Write-Host "Get all information" -ForegroundColor Green
+                    Write-Host "All System Information:" -ForegroundColor Green
                     GetAllInfo
                     Write-Host ""
                 }
@@ -252,16 +247,8 @@ do {
     }
 
 }
+# Use a while condition
+# note: -ne means "not equal to"
+# If $Choice is NOT equal to 9 - continue to loop.
+# If $Choice is equal to 9 - The condition becomes false and then exit loop.
 while ($Choice -ne 9)
-
-# Explanation of the while condition:
-# -ne means "not equal to"
-#
-# If $Choice is NOT equal to 9:
-#     The menu is displayed again.
-#
-# If $Choice IS equal to 9:
-#     The condition becomes false and the loop ends.
-#
-# Therefore, the program continues running until the user
-# selects option 9 (Exit)
