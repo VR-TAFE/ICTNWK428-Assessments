@@ -10,24 +10,27 @@ Clear-Host
 
 #========================================= MENU =========================================#
 
+# Create a function called MainMenu to contain the menu output
+function MainMenu {
 # Display the menu and set text colours titles to Cyan
-Write-Host "===========================================" -ForegroundColor Cyan
-Write-Host "          System Information Menu          " -ForegroundColor Cyan
-Write-Host "===========================================" -ForegroundColor Cyan
-Write-Host "1. Operating system currently being used"
-Write-Host "2. Windows remote service status"
-Write-Host "3. Computer manufacturer and model"
-Write-Host "4. Computer name"
-Write-Host "5. Computer domain name"
-Write-Host "6. Computer trusted hosts"
-Write-Host "7. Operating system architecture"
-Write-Host "8. Get all information"
-Write-Host "9. Quit"
-Write-Host "===========================================" -ForegroundColor Cyan
-Write-Host "    Please enter a number from 1 to 9      "
-Write-Host "        To view the information            "
-Write-Host "===========================================" -ForegroundColor Cyan
-Write-Host ""
+    Write-Host "===========================================" -ForegroundColor Cyan
+    Write-Host "          System Information Menu          " -ForegroundColor Cyan
+    Write-Host "===========================================" -ForegroundColor Cyan
+    Write-Host "1. Operating system currently being used"
+    Write-Host "2. Windows remote service status"
+    Write-Host "3. Computer manufacturer and model"
+    Write-Host "4. Computer name"
+    Write-Host "5. Computer domain name"
+    Write-Host "6. Computer trusted hosts"
+    Write-Host "7. Operating system architecture"
+    Write-Host "8. Get all information"
+    Write-Host "9. Quit"
+    Write-Host "===========================================" -ForegroundColor Cyan
+    Write-Host "    Please enter a number from 1 to 9      "
+    Write-Host "        To view the information            "
+    Write-Host "===========================================" -ForegroundColor Cyan
+    Write-Host ""
+}
 
 #========================================= VARIABLES =========================================#
 
@@ -189,111 +192,120 @@ function GetAllInfo {
 
 #========================================= SCRIPTS =========================================#
 
-# Start a do loop.
-# A do loop executes the code inside the braces at least once before
-# checking the condition at the bottom of the loop.
-do {
+function MainFunction { 
+
+    # Call this funtion MainMenu to display the menu
+    MainMenu
+
+    # Start a do loop.
+    # A do loop executes the code inside the braces at least once before
+    # checking the condition at the bottom of the loop.
+    do {
     
-    # Start a try block.
-    # Any errors that occur inside this block can be caught and handled
-    # by the catch block below.
-    try
-    {
-
-        # Get the user to input a number from the menu option and store in the variable "$Choice"
-        $Choice = Read-Host "Please enter a menu number"
-
-        # Convert the user's input from a string to an integer.
-        $Choice = [int]$Choice
-
-        # Check whether the user entered a valid menu option.
-        # -lt means "less than"
-        # -or means "either condition can be true"
-        # -gt means "greater than"
-        # If the number is less than 1 OR greater than 9,
-        # it is an invalid menu selection.
-        if ($Choice -lt 1 -or $Choice -gt 9)
+        # Start a try block.
+        # Any errors that occur inside this block can be caught and handled
+        # by the catch block below.
+        try
         {
-            # Manually generate an error using the throw statement.
-            # The generated error will be sent directly to the catch block.
-            throw "Invalid selection."
-        }
 
-        # Use a switch statement to determine which menu option the user selected.
-        switch ($Choice) {
+            # Get the user to input a number from the menu option and store in the variable "$Choice"
+            $Choice = Read-Host "Please enter a menu number"
 
-                # Choice 1 - Display "Operating system currently being used"
-                1 {
-                    # Display retrieved data from function: GetOSNameVersion
-                    GetOSNameVersion
-                }
+            # Convert the user's input from a string to an integer.
+            $Choice = [int]$Choice
 
-                # Choice 2 - Display "Windows remote service status"
-                2 {
-                    # Display retrieved data from function: GetRemoteServiceStatus
-                    GetRemoteServiceStatus
-                }
+            # Check whether the user entered a valid menu option.
+            # -lt means "less than"
+            # -or means "either condition can be true"
+            # -gt means "greater than"
+            # If the number is less than 1 OR greater than 9,
+            # it is an invalid menu selection.
+            if ($Choice -lt 1 -or $Choice -gt 9)
+            {
+                # Manually generate an error using the throw statement.
+                # The generated error will be sent directly to the catch block.
+                throw "Invalid selection."
+            }
 
-                # Choice 3 - Display "Computer manufacturer and model"
-                3 {
-                    # Display retrieved data from function: GetComputerManuMode
-                    GetComputerManuMode
-                }
+            # Use a switch statement to determine which menu option the user selected.
+            switch ($Choice) {
 
-                # Choice 4 - Display "Computer name"
-                4 {
-                    # Display retrieved data from function: GetComputerName
-                    GetComputerName
-                }
+                    # Choice 1 - Display "Operating system currently being used"
+                    1 {
+                        # Display retrieved data from function: GetOSNameVersion
+                        GetOSNameVersion
+                    }
 
-                # Choice 5 - Display "Computer domain name"
-                5 {
-                    # Display retrieved data from function: GetComputerDomainName
-                    GetComputerDomainName
-                }
+                    # Choice 2 - Display "Windows remote service status"
+                    2 {
+                        # Display retrieved data from function: GetRemoteServiceStatus
+                        GetRemoteServiceStatus
+                    }
 
-                # Choice 6 - Display "Computer trusted hosts"
-                6 {
-                    # Display retrieved data from function: GetTurstedHostStatus
-                    GetTurstedHostStatus
-                }
+                    # Choice 3 - Display "Computer manufacturer and model"
+                    3 {
+                        # Display retrieved data from function: GetComputerManuMode
+                        GetComputerManuMode
+                    }
 
-                # Choice 7 - Display "Operating system architectures"
-                7 {
-                    # Display retrieved data from function: GetOSArchitecture
-                    GetOSArchitecture
-                }
+                    # Choice 4 - Display "Computer name"
+                    4 {
+                        # Display retrieved data from function: GetComputerName
+                        GetComputerName
+                    }
 
-                # Choice 8 - Display "Computer trusted hosts"
-                8 {
-                    # Display retrieved data from function: GetAllInfo
-                    GetAllInfo
-                }
+                    # Choice 5 - Display "Computer domain name"
+                    5 {
+                        # Display retrieved data from function: GetComputerDomainName
+                        GetComputerDomainName
+                    }
 
-                # Choice 9 - Quit
-                9 {
-                    # Display exiting statement
-                    Write-Host "Exiting the menu..." -ForegroundColor Green
+                    # Choice 6 - Display "Computer trusted hosts"
+                    6 {
+                        # Display retrieved data from function: GetTurstedHostStatus
+                        GetTurstedHostStatus
+                    }
+
+                    # Choice 7 - Display "Operating system architectures"
+                    7 {
+                        # Display retrieved data from function: GetOSArchitecture
+                        GetOSArchitecture
+                    }
+
+                    # Choice 8 - Display "Computer trusted hosts"
+                    8 {
+                        # Display retrieved data from function: GetAllInfo
+                        GetAllInfo
+                    }
+
+                    # Choice 9 - Quit
+                    9 {
+                        # Display exiting statement
+                        Write-Host "Exiting the menu..." -ForegroundColor Green
                 
+                    }
                 }
             }
+
+        # Start the catch block.
+        # If an error occurs in the try block, immediately jumps to this section.
+        catch
+        {
+            # Display an error message in red text.
+            # This will occur if:
+            # - The user enters text such as "abc"
+            # - The user enters a number outside the range 1 to 9
+            Write-Host "Error: invalid input - Please try again." -ForegroundColor Red
+            Write-Host ""
         }
 
-    # Start the catch block.
-    # If an error occurs in the try block, immediately jumps to this section.
-    catch
-    {
-        # Display an error message in red text.
-        # This will occur if:
-        # - The user enters text such as "abc"
-        # - The user enters a number outside the range 1 to 9
-        Write-Host "Error: invalid input - Please try again." -ForegroundColor Red
-        Write-Host ""
     }
-
+    # Use a while condition
+    # note: -ne means "not equal to"
+    # If $Choice is NOT equal to 9 - continue to loop.
+    # If $Choice is equal to 9 - The condition becomes false and then exit loop.
+    while ($Choice -ne 9)
 }
-# Use a while condition
-# note: -ne means "not equal to"
-# If $Choice is NOT equal to 9 - continue to loop.
-# If $Choice is equal to 9 - The condition becomes false and then exit loop.
-while ($Choice -ne 9)
+
+# Call this function MainFunction to load the following scripts
+MainFunction
